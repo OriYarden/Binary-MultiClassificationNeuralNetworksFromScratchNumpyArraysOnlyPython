@@ -114,10 +114,10 @@ as well as for multi-classification:
 ![download (31)](https://github.com/OriYarden/Binary-MultiClassificationNeuralNetworksFromScratchNumpyArraysOnlyPython/assets/137197657/fa379bd2-f93f-45bb-9637-6681fa622f61)
 
 
-in terms of the error decreasing over training iterations (i.e. machine learning).
+in terms of the error decreasing over training iterations (i.e. machine learning);
 
 
-by using the train method shown below:
+The train method is shown below:
 
     def train(self, x, y, iterations, new_weights=False, learning_rate=1.0):
         '''
