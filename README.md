@@ -101,7 +101,7 @@ We can build a Neural Network (NN) class in Python with an init_weights method t
         return _weights1, _weights2
 
 
-After 3,000 training iterations, where each "training iteration" was one sample from the Iris dataset selected randomly, we can see a clear learning curse for both binary classification:
+After 3,000 training iterations, where each "training iteration" was one sample from the Iris dataset selected randomly, we can see a clear learning curve for both binary classification:
 
 ![download (29)](https://github.com/OriYarden/Binary-MultiClassificationNeuralNetworksFromScratchNumpyArraysOnlyPython/assets/137197657/b895bb55-a1d8-4794-8de1-0b718c9d7574)
 
@@ -113,6 +113,8 @@ as well as for multi-classification:
 
 ![download (31)](https://github.com/OriYarden/Binary-MultiClassificationNeuralNetworksFromScratchNumpyArraysOnlyPython/assets/137197657/fa379bd2-f93f-45bb-9637-6681fa622f61)
 
+
+in terms of the error decreasing over training iterations (i.e. machine learning).
 
 
 by using the train method shown below:
