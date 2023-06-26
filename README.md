@@ -37,7 +37,7 @@ and x which is the input data of the four features (each sample contains four fe
   
       x = [5.1, 3.5, 1.4, 0.2]
 
-We can construct a neural network comprising of an input layer, a hidden layer, and an output layer shown as diagram illustrating the layer connections and the direction of forward propagation in the figure below:
+We can construct a neural network comprising of an input layer, a hidden layer, and an output layer shown as a diagram illustrating the layer connections and the direction of forward propagation in the figure below:
 
 
 ![Picture4](https://github.com/OriYarden/Binary-MultiClassificationNeuralNetworksFromScratchNumpyArraysOnlyPython/assets/137197657/2ee3be25-85dc-4050-8b42-263bf8cf72d7)
@@ -85,7 +85,7 @@ This is because the multi-classification neural network's weights matrices are c
 ![Picture6](https://github.com/OriYarden/Binary-MultiClassificationNeuralNetworksFromScratchNumpyArraysOnlyPython/assets/137197657/12d9bbb9-b123-498a-b067-c8e4b208e0b3)
 
 
-If we didn't have the weights matrix dimensions visualized in a figure, we can work backwards from the output layer back to the input layer or I mean hidden layer since we didn't change the number of input features which means we only have to change from the second weights matrix to the second dimension of the first weights matrix (i.e. the first dimension of the first weights matrix will be the same since the input layer wasn't changed).
+If we didn't have the weights matrix dimensions visualized in a figure, we can work backwards from the output layer back to the input layer or I mean hidden layer since we didn't change the number of input features which means we only have to change from the second weights matrix to the second dimension of the first weights matrix (i.e. the first dimension of the first weights matrix will be the same since the input layer hasn't changed).
 
 We know we want three output labels which corresponds to three output nodes. The number of output nodes is determined by the desired number of output labels, which dictates the second dimension (i.e. columns) of the second weights matrix. We know that the hidden layer that is projecting to our output layer has an additional bias unit so we have to add plus one node to the desired number of output labels, which is three plus one; thus, the first dimension (i.e. rows) of the second weights matrix has to be four. The input layer's projections to the hidden layer is also dictated by the desired number of output labels, which means the second dimension (i.e. columns) of the first weights matrix has to be three.
 
