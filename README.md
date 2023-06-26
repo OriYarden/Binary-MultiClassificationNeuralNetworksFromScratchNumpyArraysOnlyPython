@@ -1,11 +1,9 @@
-# Binary-MultiClassificationNeuralNetworksFromScratchNumpyArraysOnlyPython
-Neural networks for binary and multiple classification from scratch (using only numpy arrays) in Python
+# Binary and Multiple Classification Neural Networks from Scratch using only numpy arrays in Python
 
 
+We will discuss how to design and construct neural networks of machine learning and artifical intelligence for binary and multi-classification from scratch in Python without using any Pytorch-like packages and instead doing all the math on numpy arrays. For the following examples we'll use the Iris dataset.
 
-We will discuss how to design and construct neural networks of machine learning and artifical intelligence for binary and multi-classification from scratch (using only numpy arrays) in Python. For the following examples, we'll use the Iris dataset.
-
-Let's describe and visualize the Iris dataset first. The Iris dataset is a small but classic dataset used in evaluating classification methodologies. Most importantly, the dataset is open source; it comprises of "setosa", "versicolor", and "virginica" types with their four measures of sepal length, sepal width, petal length, and petal width. We don't need to focus too much on the details, and all we need to know is that the three types have four metrics or columns; there are 150 rows corresponding to the 50 samples of each of the three types.
+The Iris dataset is a small but classic dataset used in evaluating classification methodologies. Most importantly, the dataset is open source; it comprises of "setosa", "versicolor", and "virginica" types with their four measures of sepal length, sepal width, petal length, and petal width. We don't need to focus too much on the details, and all we need to know is that the three types have four metrics or columns; there are 150 rows corresponding to the 50 samples of each of the three types.
 
 To obtain the archived, open source data we'll use the following code (also included as a ipynb file in this repository):
 
