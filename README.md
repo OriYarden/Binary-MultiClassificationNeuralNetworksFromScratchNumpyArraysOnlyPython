@@ -267,4 +267,4 @@ Below is the entire class and its methods (I included this as an ipynb file in t
     nn.plot_performance()
 
 
-which also includes the method for plotting performance or error over training iterations shown in previous figures. This Neural Network (NN) Python class is robust in that it can classify any number of labels with any number of inputs, binary or multi-classification, just by correctly initializing the weights matrices' dimensions. Training on the Iris dataset for example, we can use two, three, or even just one single input feature.
+which also includes the method for plotting performance or error over training iterations shown in previous figures. This Neural Network (NN) Python class is robust in that it can classify any number of labels with any number of inputs, binary or multi-classification, because it can correctly initialize the weights matrices' dimensions (... and obviously do all the rest of the math correctly, too). Training on the Iris dataset for example, we can use two, three, or even just one single input feature.
