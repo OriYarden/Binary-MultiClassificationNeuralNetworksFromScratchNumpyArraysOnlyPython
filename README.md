@@ -19,16 +19,14 @@ Binary classification involves discriminating or classifying data according to o
     df.tail()
     _y = df.iloc[:100, 4].values
     x = df.iloc[:_y.shape[0], :4].values
-    y = np.zeros((len(_y), 1)).astype(float)
-    for i in range(len(_y)):
-        if _y[i].endswith('setosa'):
-            y[i, 0] = 1.0
+    y = np.zeros((_y.shape[0], 1)).astype(float)
+    y[np.where(_y == 'Iris-versicolor')] = 1.0
 
 Now we have a numpy array (with shape = (100, 1)) where y is the output labels (there are 50 ones and 50 zeros in total, here I'm showing one sample of each):
 
     y = [
-         [1.0],
          [0.0],
+         [1.0],
          ]
 
 and x which is the input data of the four features (each sample contains four features as a numpy array, there are 50 of each type, here I'm showing one sample):
@@ -59,14 +57,11 @@ In contrast, designing a neural network for multiclassification in which we use 
     df.tail()
     _y = df.iloc[:150, 4].values
     x = df.iloc[:_y.shape[0], :4].values
-    y = np.zeros((len(_y), 3)).astype(float)
-    for i in range(len(_y)):
-        if _y[i].endswith('setosa'):
-            y[i, 0] = 1.0
-        elif _y[i].endswith('versicolor'):
-            y[i, 1] = 1.0
-        elif _y[i].endswith('virginica'):
-            y[i, -1] = 1.0
+    y = np.zeros((_y.shape[0], 3)).astype(float)
+    y[np.where(_y == 'Iris-setosa'), :] = [1.0, 0.0, 0.0]
+    y[np.where(_y == 'Iris-versicolor'), :] = [0.0, 1.0, 0.0]
+    y[np.where(_y == 'Iris-virginica'), :] = [0.0, 0.0, 1.0]
+
 
 Requires setting up the layers a bit differently:
 
@@ -90,12 +85,9 @@ We know we want three output labels which corresponds to three output nodes. The
 We can build a Neural Network (NN) class in Python with an init_weights method that operates using those same factors I just described for both binary and multi-classification neural networks:
 
     def init_weights(self):
-        if self.y.shape[-1] == 1: # 1 output node only (i.e. binary classification);
-            _weights1 = np.reshape(np.random.random((self.x.shape[1] + 1)*self.x.shape[1]), [self.x.shape[1] + 1, self.x.shape[1]])
-            _weights2 = np.reshape(np.random.random((self.x.shape[1] + 1)*self.y.shape[1]), [self.x.shape[1] + 1, self.y.shape[1]])
-        else: # more than 1 output node (i.e. multiple classification);
-            _weights1 = np.reshape(np.random.random((self.x.shape[1] + 1)*self.y.shape[1]), [self.x.shape[1] + 1, self.y.shape[1]])
-            _weights2 = np.reshape(np.random.random((self.y.shape[1] + 1)*self.y.shape[1]), [self.y.shape[1] + 1, self.y.shape[1]])
+        hidden_units = [self.x.shape[1], self.x.shape[1]] if self.y.shape[1] == 1 else [self.y.shape[1], self.y.shape[1]]
+        _weights1 = np.random.random((self.x.shape[1] + 1)*hidden_units[0]).reshape(self.x.shape[1] + 1, hidden_units[0])
+        _weights2 = np.random.random((hidden_units[1] + 1)*self.y.shape[1]).reshape(hidden_units[1] + 1, self.y.shape[1])
         return _weights1, _weights2
 
 
@@ -156,20 +148,16 @@ The backpropagation involves providing the weights matrices feedback; we need th
 
 Below is the entire class and its methods (I included this as an ipynb file in the repository along with the Iris data):
 
-
     import numpy as np
     from matplotlib import pyplot as plt
-
+    
     class NN:
         def init_weights(self):
-            if self.y.shape[-1] == 1: # 1 output node only (i.e. binary classification);
-                _weights1 = np.reshape(np.random.random((self.x.shape[1] + 1)*self.x.shape[1]), [self.x.shape[1] + 1, self.x.shape[1]])
-                _weights2 = np.reshape(np.random.random((self.x.shape[1] + 1)*self.y.shape[1]), [self.x.shape[1] + 1, self.y.shape[1]])
-            else: # more than 1 output node (i.e. multiple classification);
-                _weights1 = np.reshape(np.random.random((self.x.shape[1] + 1)*self.y.shape[1]), [self.x.shape[1] + 1, self.y.shape[1]])
-                _weights2 = np.reshape(np.random.random((self.y.shape[1] + 1)*self.y.shape[1]), [self.y.shape[1] + 1, self.y.shape[1]])
+            hidden_units = [self.x.shape[1], self.x.shape[1]] if self.y.shape[1] == 1 else [self.y.shape[1], self.y.shape[1]]
+            _weights1 = np.random.random((self.x.shape[1] + 1)*hidden_units[0]).reshape(self.x.shape[1] + 1, hidden_units[0])
+            _weights2 = np.random.random((hidden_units[1] + 1)*self.y.shape[1]).reshape(hidden_units[1] + 1, self.y.shape[1])
             return _weights1, _weights2
-
+    
         def train(self, x, y, iterations, new_weights=False, learning_rate=1.0):
             '''
             x: must be a numpy array where columns are the features and rows are the samples;
@@ -178,31 +166,31 @@ Below is the entire class and its methods (I included this as an ipynb file in t
             self.x, self.y = x, y
             if not self.__dict__.__contains__('weights1') or new_weights:
                 self.weights1, self.weights2 = self.init_weights()
-
+    
             self.errors = []
             for _ in range(iterations):
                 random_sample = np.random.randint(self.y.shape[0])
                 input_layer = np.append(self.x[random_sample], np.ones(1), axis=0)
                 input_layer.shape += (1,)
-
+    
                 hidden_layer = np.append(self.activation_function(self.weights1_multiplication(self.weights1, input_layer)), np.ones(1))
                 hidden_layer.shape += (1,)
                 output_layer = self.activation_function(self.weights2_multiplication(self.weights2, np.reshape(hidden_layer, [1, hidden_layer.shape[0]])))
-
+    
                 _error = self.y[random_sample] - output_layer
                 self.errors.append(_error)
-
+    
                 feedback_weights2 = _error*output_layer*(1.0 - output_layer)*np.reshape(np.append(hidden_layer[:-1, 0], np.ones(1)), [hidden_layer.shape[0], 1])
                 hidden_layer_error = self.weights2*_error*np.reshape(hidden_layer, [hidden_layer.shape[0], 1])*np.reshape(1.0 - hidden_layer, [hidden_layer.shape[0], 1])
                 feedback_weights1 = hidden_layer_error[:-1, 0]*input_layer
-
+    
                 self.weights1 += feedback_weights1*learning_rate
                 self.weights2 += feedback_weights2*learning_rate
-
+    
         @staticmethod
         def activation_function(x):
             return 1.0 / (1.0 + np.exp(-x))
-
+    
         @staticmethod
         def weights1_multiplication(x, y):
             _result = np.zeros((1, x.shape[1])).astype(float)
@@ -210,7 +198,7 @@ Below is the entire class and its methods (I included this as an ipynb file in t
                 for col in range(x.shape[1]):
                     _result[0, col] += x[row, col]*y[row]
             return _result[0]
-
+    
         @staticmethod
         def weights2_multiplication(x, y):
             _result = np.zeros(x.shape[1]).astype(float)
@@ -218,14 +206,14 @@ Below is the entire class and its methods (I included this as an ipynb file in t
                 for col in range(x.shape[1]):
                     _result[col] += x[row, col]*y[0, row]
             return _result
-
+    
         def plot_performance(self):
             def moving_average(y, moving_window=30):
                 _y = []
                 for _x in range(len(y)):
                     _y.append(np.mean(y[:_x + 1]) if _x < moving_window else np.mean(y[_x - moving_window:_x]))
                 return _y
-
+    
             errors = [sum(_errors) for _errors in self.errors]
             fig = plt.figure(figsize=(15, 5))
             ax = plt.subplot(1, 3, 1)
@@ -263,6 +251,5 @@ Below is the entire class and its methods (I included this as an ipynb file in t
     nn = NN()
     nn.train(x, y, iterations=3000)
     nn.plot_performance()
-
 
 which also includes the method for plotting performance or error over training iterations shown in previous figures. This Neural Network (NN) Python class is robust in that it can classify any number of labels with any number of inputs, binary or multi-classification, because it can correctly initialize the weights matrices' dimensions (... and obviously do all the rest of the math correctly, too). Training on the Iris dataset for example, we can use two, three, or even just one single input feature.
